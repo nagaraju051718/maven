@@ -1,58 +1,42 @@
-@Library('mylibrary')_
 pipeline
 {
     agent any
     stages
     {
-        stage('Download_Master')
+        stage('Download')
         {
             steps
             {
-                script
-                {
-                    cicd.gitDownload("maven")
-                }
+                git 'https://github.com/IntelliqDevops/maven.git'
             }
         }
-        stage('Build_Master')
+        stage('Build')
         {
             steps
             {
-                script
-                {
-                    cicd.buildArtifact()
-                }
+                sh 'mvn package'
             }
         }
-        stage('Deployment_Master')
+        stage('Deployment')
         {
             steps
             {
-                script
-                {
-                    cicd.deployTomcat("DeclarativePipelinewithSharedLibraries","172.31.19.202","testapp")
-                }
+                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: '8c4a8c6e-136e-430f-b8dd-3365d294c75e', path: '', url: 'http://172.31.31.19:8080')], contextPath: 'testapp', war: '**/*.war'
             }
         }
-        stage('Testing_Master')
+         stage('Testing')
         {
             steps
             {
-                script
-                {
-                    cicd.gitDownload("FunctionalTesting")
-                    cicd.runSelenium("DeclarativePipelinewithSharedLibraries")
-                }
+                git 'https://github.com/IntelliqDevops/FunctionalTesting.git'
+                sh 'java -jar /var/lib/jenkins/workspace/DeclarativePipeline1/testing.jar'
             }
         }
-        stage('Delivery_Master')
+        stage('Delivery')
         {
             steps
             {
-                script
-                {
-                    cicd.deployTomcat("DeclarativePipelinewithSharedLibraries","172.31.25.52","prodapp")
-                }
+                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: '8c4a8c6e-136e-430f-b8dd-3365d294c75e', path: '', url: 'http://172.31.25.180:8080')], contextPath: 'prodapp', war: '**/*.war'
             }
         }
     }
