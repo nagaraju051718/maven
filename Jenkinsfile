@@ -53,7 +53,7 @@ pipeline
             {
                 script
                 {
-                    cicd.deployTomcat("DeclarativePipelinewithSharedLibraries","172.31.25.180","prodapp")
+                    cicd.deployTomcat("DeclarativePipelinewithSharedLibraries","172.31.25.180","myprodapp")
                 }
             }
         }
