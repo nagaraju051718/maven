@@ -1,60 +1,42 @@
-@Library('mylibrary')_
-
-
-pipeline
+	pipeline
 {
-    agent any
+    agent any 
     stages
     {
-        stage('Download_Master')
+        stage('continuousDownload')
         {
             steps
             {
-                script
-                {
-                    cicd.gitDownload("maven")
-                }
+                git 'https://github.com/IntelliqDevops/maven.git'
             }
         }
-        stage('Build_Master')
+        stage('continuousBuild')
         {
             steps
             {
-                script
-                {
-                    cicd.buildArtifact()
-                }
+                sh 'mvn package'
             }
         }
-        stage('Deployment_Master')
+        stage('continuousDeployment')
         {
             steps
             {
-                script
-                {
-                    cicd.deployTomcat("DeclarativePipelinewithSharedLibraries","172.31.31.19","myapp")
-                }
+                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: '01471035-fabd-4831-bf1b-13f4ef7a2657', path: '', url: 'http://172.31.23.193:8080')], contextPath: 'testapp', war: '**/*.war'
             }
         }
-        stage('Testing_Master')
+        stage('continuousTesting')
         {
             steps
             {
-                script
-                {
-                    cicd.gitDownload("FunctionalTesting")
-                    cicd.executeSelenium("DeclarativePipelinewithSharedLibraries")
-                }
+                git 'https://github.com/IntelliqDevops/FunctionalTesting.git'
+                sh 'java -jar testing.jar'
             }
         }
-        stage('Delivery_Master')
+        stage('continuousDelivery')
         {
             steps
             {
-                script
-                {
-                    cicd.deployTomcat("DeclarativePipelinewithSharedLibraries","172.31.25.180","myprodapp")
-                }
+                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: '748403f5-5cce-4b12-9616-e06056a5e050', path: '', url: 'http://172.31.29.8:8080')], contextPath: 'prodapp', war: '**/*.war'
             }
         }
     }
