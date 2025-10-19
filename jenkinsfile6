@@ -1,0 +1,24 @@
+node('built-in')
+{
+    stage('continuousDownload')
+    {
+        git 'https://github.com/IntelliqDevops/maven.git'
+    }
+    stage('continuousBuild')
+    {
+        sh 'mvn package'
+    }
+    stage('continuousDeployment')
+    {
+        deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: '2779c8a8-0c08-439b-bc8c-2918855ed81d', path: '', url: 'http://172.31.23.7:8080')], contextPath: 'testapp', war: '**/*.war'
+    }
+    stage('continuousTesting')
+    {
+        git 'https://github.com/IntelliqDevops/FunctionalTesting.git'
+        sh 'java -jar testing.jar'
+    }
+    stage('continuousDelivery')
+    {
+        deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: '2779c8a8-0c08-439b-bc8c-2918855ed81d', path: '', url: 'http://172.31.27.7:8080')], contextPath: 'prodapp', war: '**/*.war'
+    }
+}
