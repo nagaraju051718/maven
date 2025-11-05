@@ -1,0 +1,60 @@
+@Library('rajuLibrary')_
+
+pipeline
+{
+    agent any
+    stages
+    {
+        stage('Download')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.gitDownload("maven")
+                }
+            }
+        }
+        stage('Build')
+        {
+            steps
+            {
+                script
+                {
+                    sh 'mvn package'
+                }
+            }
+        }
+        stage('Deployment')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.deployTomcat("librarydeclarativepipeline","172.31.4.203","testapp")
+                }
+            }
+        }
+        stage('Testing')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.gitDownload("FunctionalTesting")
+                    cicd.executeSelenium("librarydeclarativepipeline")
+                }
+            }
+        }
+        stage('Delivery')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.deployTomcat("librarydeclarativepipeline","172.31.12.96","prodapp")
+                }
+            }
+        }
+    }
+}
