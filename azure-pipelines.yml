@@ -4,16 +4,12 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
 trigger:
-- main
+- master
 
 pool:
   name: 'azureuser'
-stages:
-  - stage: Download
-    displayName: Download
-    jobs:
-      - job: Dwonload
-        displayName: Download
-        steps:
+
+steps:
+
          
   
