@@ -24,7 +24,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: 
-       cat >Dockerfile <<'EOF'
+       cat > Dockerfile <<'EOF'
        FROM tomee
        COPY /home/azureuser/myagent/_work/3/s/webapp/target/webapp.war /usr/local/tomee/webapps/raju.war
        EOF
