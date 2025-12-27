@@ -24,7 +24,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: 
-       cat >'EOF' << Dockerfile
+       cat > Dockerfile << 'EOF'
        FROM tomee
        COPY webapp.war /usr/local/tomee/webapps/raju.war
        EOF
