@@ -26,5 +26,5 @@ steps:
     script: 
        cat > Dockerfile << 'EOF'
        FROM tomee
-       COPY webapp.war /usr/local/tomee/webapps/raju.war
+       COPY /home/azureuser/myagent/_work/3/s/webapp/target/webapp.war /usr/local/tomee/webapps/raju.war
        EOF
