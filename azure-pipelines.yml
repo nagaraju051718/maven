@@ -31,4 +31,8 @@ steps:
 - task: Bash@3
   inputs:
     targetType: 'inline'
-    script: 'docker build -t myraju .'
+    script: 'docker build -t vakan.azure.io/myraju .'
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: 'docker push vakan.azure.io/myraju'
