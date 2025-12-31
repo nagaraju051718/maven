@@ -55,10 +55,4 @@ steps:
 - task: Bash@3
   inputs:
     targetType: 'inline'
-    script: "ssh azureuser@20.49.3.222 ansible all -m shell -a 'docker rm -f $(docker ps -aq)' -b"
-- task: Bash@3
-  inputs:
-    targetType: 'inline'
-    script: "ssh azureuser@20.49.3.222 ansible all -m shell -a 'docker system prune -af' -b"
-
-
+    script: 'ssh azureuser@20.49.3.222 ansible-playbook delete.yml -b'
